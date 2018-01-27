@@ -1,0 +1,71 @@
+Sub WellsFargo_PT1
+
+    For Each ws In Worksheets
+      Dim WorksheetName as String
+      LastRow = ws.Cells(Rows.Count, 1).End(xlUp).Row
+      WorksheetName = ws.name
+      State = Split(WorksheetName, "_")
+      ws.Range("A1").EntireColumn.Insert
+      ws.Cells(1,1).Value = "State"
+      ws.Range("A2:A" & LastRow) = State(0)
+      LastColumn = ws.Cells(1, Columns.Count).End(xlToLeft).Column
+      For i = 3 To LastColumn
+        YearHeader = ws.Cells(1, i).Value
+        YearSplit = Split(YearHeader, " ")
+        ws.Cells(1, i).Value = YearSplit(3)
+      Next i 
+
+      For i = 2 To LastRow
+        For j = 2 To LastColumn
+          ws.Cells(i, j).Style = "Currency"
+        Next j
+      Next i
+    
+    Next ws
+    MsgBox ("Fixes Complete")
+End Sub
+
+
+Sub WellsFargo_PtII()
+    
+    ' last row in combined worksheet
+    Dim lastRowCombined As Integer
+
+    ' first row in all worksheets
+    Dim firstRow As Integer
+    firstRow = 2
+
+    ' last row in current worksheet
+    Dim lastRow As Integer
+
+    ' number of rows in current worksheet
+    Dim nRows As Integer
+
+    ' Specify the location of the combined sheet
+    Set combined_sheet = Worksheets("Combined_Data")
+
+    ' Loop through all sheets
+    For Each ws In Worksheets
+
+        If ws.Name <> "Combined_Data" Then
+
+            ' Find the last row of the combined sheet after each paste
+            lastRowCombined = combined_sheet.Cells(Rows.Count, "A").End(xlUp).Row
+
+            ' Find the last row in current worksheet
+            lastRow = ws.Cells(Rows.Count, "A").End(xlUp).Row
+
+            ' Calculate the number of rows in current worksheet (last row - first row + 1)
+            nRows = lastRow - firstRow + 1
+
+            ' Copy the contents of each state sheet into the combined sheet
+            combined_sheet.Range("A" & lastRowCombined + 1 & ":G" & lastRowCombined + nRows).Value = ws.Range("A2:G" & lastRow).Value
+
+        End If
+
+    Next ws
+End Sub
+   
+ Next ws
+ 
+End Sub

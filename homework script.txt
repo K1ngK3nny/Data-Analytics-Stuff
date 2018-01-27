@@ -1,0 +1,52 @@
+Sub HW()
+' looping through the workbook
+Dim WS_Count As Integer
+Dim K As Integer
+' This is counting the number of worksheets
+WS_Count = ActiveWorkbook.Worksheets.Count
+
+'For K = 1 To WS_Count
+For Each ws In Worksheets
+  Dim Ticker As String
+  ' dim as long bc its a long number?
+  Dim Stock_Volume As Double
+  ' I still don't understand this part from the CC checker example
+  Dim Summary_Column As Integer
+  Summary_Column = 2
+  ' I doing this bc there are a different number of rows in each worksheet
+  Dim LastRow As Long
+  ' Does this work? Trying to get the count of used rows in column A in every WS
+  'LastRow = Range("A").Rows.Count
+   'LastRow = ws.Range("A").End(xlUp).Row
+   'LastRow = Range("A").End(xlUp).Row
+   Debug.Print (Summary_Column)
+    LastRow = ws.Cells(ws.Rows.Count, "A").End(xlUp).Row
+
+    ws.Activate
+  ' need to activate worksheet or something
+  'runs along first column
+  For i = 2 To LastRow
+    ' finds where values change in first column
+    If Cells(i + 1, 1).Value <> Cells(i, 1).Value Then
+     ' upon the change assigns the value b4 change to Ticker
+     Ticker = Cells(i + 1, 1).Value
+     ' adds up stock volume for same ticker values
+     Stock_Volume = Stock_Volume + Cells(i, 7).Value
+     ' puts the ticker symbol in column I
+     Range("I" & Summary_Column).Value = Ticker
+     ' puts the stock volume in the J column
+     Range("J" & Summary_Column).Value = Stock_Volume
+     ' moves over for next sum
+     Summary_Column = Summary_Column + 1
+     ' resets?
+     Stock_Volume = 0
+    Else
+    Debug.Print (Stock_Volume + Cells(i, 7).Value)
+     ' keeps a running total of stock volume of same ticker symbol
+     Stock_Volume = Stock_Volume + Cells(i, 7).Value
+    End If
+  Next i
+'Next K
+Next ws
+
+End Sub
