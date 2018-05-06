@@ -1,2 +1,2 @@
 # Data-Analytics-Stuff
-Homework
+Some of the data projects I have worked on.
